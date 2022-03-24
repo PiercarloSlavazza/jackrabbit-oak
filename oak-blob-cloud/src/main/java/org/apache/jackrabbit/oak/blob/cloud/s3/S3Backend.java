@@ -337,18 +337,6 @@ public class S3Backend extends AbstractSharedBackend {
                     throw new DataStoreException("Collision: " + key
                         + " new length: " + file.length() + " old length: " + l);
                 }
-                LOG.debug("[{}]'s exists, lastmodified = [{}]", key,
-                    objectMetaData.getLastModified().getTime());
-                CopyObjectRequest copReq = new CopyObjectRequest(bucket, key,
-                    bucket, key);
-                copReq.setNewObjectMetadata(objectMetaData);
-                Copy copy = tmx.copy(s3ReqDecorator.decorate(copReq));
-                try {
-                    copy.waitForCopyResult();
-                    LOG.debug("lastModified of [{}] updated successfully.", identifier);
-                }catch (Exception e2) {
-                    throw new DataStoreException("Could not upload " + key, e2);
-                }
             }
 
             if (objectMetaData == null) {
